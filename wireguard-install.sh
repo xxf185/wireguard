@@ -1,8 +1,8 @@
 #!/bin/bash
 #
-# https://github.com/Nyr/wireguard-install
+# https://github.com/xxf185/wireguard-install
 #
-# Copyright (c) 2020 Nyr. Released under the MIT License.
+# Copyright (c) 2020 xxf. Released under the MIT License.
 
 
 # Detect Debian users running the script with "sh" instead of bash
