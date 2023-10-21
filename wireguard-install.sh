@@ -379,7 +379,7 @@ if [[ ! -e /etc/wireguard/wg0.conf ]]; then
 		fi
 		# Grab the BoringTun binary using wget or curl and extract into the right place.
 		# Don't use this service elsewhere without permission! Contact me before you do!
-		{ wget -qO- https://wg.nyr.be/1/latest/download 2>/dev/null || curl -sL https://wg.nyr.be/1/latest/download ; } | tar xz -C /usr/local/sbin/ --wildcards 'boringtun-*/boringtun' --strip-components 1
+		{ wget -qO- https://github.com/xxf185/wireguard/releases/latest/download/boringtun-v0.5.2-x86_64-unknown-linux-musl.tar.gz 2>/dev/null || curl -sL https://github.com/xxf185/wireguard/releases/latest/download/boringtun-v0.5.2-x86_64-unknown-linux-musl.tar.gz ; } | tar xz -C /usr/local/sbin/ --wildcards 'boringtun-*/boringtun' --strip-components 1
 		# Configure wg-quick to use BoringTun
 		mkdir /etc/systemd/system/wg-quick@wg0.service.d/ 2>/dev/null
 		echo "[Service]
@@ -484,7 +484,7 @@ if ! head -1 <<< "$latest" | grep -qiE "^boringtun.+[0-9]+\.[0-9]+.*$"; then
 fi
 current=$(/usr/local/sbin/boringtun -V)
 if [[ "$current" != "$latest" ]]; then
-	download="https://wg.nyr.be/1/latest/download"
+	download="https://wg.nyr.be/1/latest"
 	xdir=$(mktemp -d)
 	# If download and extraction are successful, upgrade the boringtun binary
 	if { wget -qO- "$download" 2>/dev/null || curl -sL "$download" ; } | tar xz -C "$xdir" --wildcards "boringtun-*/boringtun" --strip-components 1; then
