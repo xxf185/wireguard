@@ -484,7 +484,7 @@ if ! head -1 <<< "$latest" | grep -qiE "^boringtun.+[0-9]+\.[0-9]+.*$"; then
 fi
 current=$(/usr/local/sbin/boringtun -V)
 if [[ "$current" != "$latest" ]]; then
-	download="https://wg.nyr.be/1/latest"
+	download="https://github.com/xxf185/wireguard/releases/latest/download/boringtun-v0.5.2-x86_64-unknown-linux-musl.tar.gz"
 	xdir=$(mktemp -d)
 	# If download and extraction are successful, upgrade the boringtun binary
 	if { wget -qO- "$download" 2>/dev/null || curl -sL "$download" ; } | tar xz -C "$xdir" --wildcards "boringtun-*/boringtun" --strip-components 1; then
