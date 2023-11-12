@@ -192,6 +192,7 @@ if [[ ! -e /etc/wireguard/wg0.conf ]]; then
 	clear
 	echo
 	echo '---------------WireGuard一键脚本---------------'
+ 	echo
 	# If system has a single IPv4, it is selected automatically. Else, ask the user
 	if [[ $(ip -4 addr | grep inet | grep -vEc '127(\.[0-9]{1,3}){3}') -eq 1 ]]; then
 		ip=$(ip -4 addr | grep inet | grep -vE '127(\.[0-9]{1,3}){3}' | cut -d '/' -f 1 | grep -oE '[0-9]{1,3}(\.[0-9]{1,3}){3}')
@@ -245,7 +246,7 @@ if [[ ! -e /etc/wireguard/wg0.conf ]]; then
 	read -p "默认 [51820]: " port
 	until [[ -z "$port" || "$port" =~ ^[0-9]+$ && "$port" -le 65535 ]]; do
 		echo "$port: invalid port."
-		read -p "端口 [51820]: " port
+		read -p "默认 [51820]: " port
 	done
 	[[ -z "$port" ]] && port="51820"
 	echo
