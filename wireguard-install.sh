@@ -564,7 +564,7 @@ else
 			wg addconf wg0 <(sed -n "/^# BEGIN_PEER $client/,/^# END_PEER $client/p" /etc/wireguard/wg0.conf)
 			echo
 			qrencode -t UTF8 < ~/"$client.conf"
-			echo -e '\xE2\x86\x91 That is a QR code containing your client configuration.'
+			echo -e '\xE2\x86\x91 配置文件二维码'
 			echo
 			echo "$client 已添加.配置文件目录:" ~/"$client.conf"
 			exit
