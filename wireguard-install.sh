@@ -532,6 +532,7 @@ EOF
 	echo "可以通过再次运行此脚本来添加新用户"
 else
 	clear
+ 	echo
 	echo "WireGuard已安装"
 	echo
 	echo "---------------WireGuard一键脚本---------------"
@@ -591,7 +592,7 @@ else
 			read -p "确认移除$client? [y/N]: " remove
 			until [[ "$remove" =~ ^[yYnN]*$ ]]; do
 				echo "$remove: invalid selection."
-				read -p "确认移除$client?? [y/N]: " remove
+				read -p "确认移除$client? [y/N]: " remove
 			done
 			if [[ "$remove" =~ ^[yY]$ ]]; then
 				# The following is the right way to avoid disrupting other active connections:
