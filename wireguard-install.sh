@@ -99,17 +99,17 @@ TUN needs to be enabled before running this installer."
 fi
 
 new_client_dns () {
-	echo "DNS服务器"
+	echo "DNS server"
 	echo "   1) Current system resolvers"
 	echo "   2) Google"
 	echo "   3) 1.1.1.1"
 	echo "   4) OpenDNS"
 	echo "   5) Quad9"
 	echo "   6) AdGuard"
-	read -p "选择 [4]: " dns
+	read -p "选择 [1]: " dns
 	until [[ -z "$dns" || "$dns" =~ ^[1-6]$ ]]; do
 		echo "$dns: invalid selection."
-		read -p "选择 [4]: " dns
+		read -p "选择 [1]: " dns
 	done
 		# DNS
 	case "$dns" in
@@ -190,16 +190,14 @@ if [[ ! -e /etc/wireguard/wg0.conf ]]; then
 		apt-get install -y wget
 	fi
 	clear
-	echo
-	echo '---------------WireGuard一键脚本---------------'
- 	echo
+	echo '--------------------WireGuard--------------------'
 	# If system has a single IPv4, it is selected automatically. Else, ask the user
 	if [[ $(ip -4 addr | grep inet | grep -vEc '127(\.[0-9]{1,3}){3}') -eq 1 ]]; then
 		ip=$(ip -4 addr | grep inet | grep -vE '127(\.[0-9]{1,3}){3}' | cut -d '/' -f 1 | grep -oE '[0-9]{1,3}(\.[0-9]{1,3}){3}')
 	else
 		number_of_ip=$(ip -4 addr | grep inet | grep -vEc '127(\.[0-9]{1,3}){3}')
 		echo
-		echo "IPv4 地址"
+		echo "IPv4地址"
 		ip -4 addr | grep inet | grep -vE '127(\.[0-9]{1,3}){3}' | cut -d '/' -f 1 | grep -oE '[0-9]{1,3}(\.[0-9]{1,3}){3}' | nl -s ') '
 		read -p "选择 [1]: " ip_number
 		until [[ -z "$ip_number" || "$ip_number" =~ ^[0-9]+$ && "$ip_number" -le "$number_of_ip" ]]; do
@@ -231,27 +229,27 @@ if [[ ! -e /etc/wireguard/wg0.conf ]]; then
 	if [[ $(ip -6 addr | grep -c 'inet6 [23]') -gt 1 ]]; then
 		number_of_ip6=$(ip -6 addr | grep -c 'inet6 [23]')
 		echo
-		echo "Which IPv6 address should be used?"
+		echo "IPv6地址"
 		ip -6 addr | grep 'inet6 [23]' | cut -d '/' -f 1 | grep -oE '([0-9a-fA-F]{0,4}:){1,7}[0-9a-fA-F]{0,4}' | nl -s ') '
-		read -p "IPv6 address [1]: " ip6_number
+		read -p "选择 [1]: " ip6_number
 		until [[ -z "$ip6_number" || "$ip6_number" =~ ^[0-9]+$ && "$ip6_number" -le "$number_of_ip6" ]]; do
 			echo "$ip6_number: invalid selection."
-			read -p "IPv6 address [1]: " ip6_number
+			read -p "选择 [1]: " ip6_number
 		done
 		[[ -z "$ip6_number" ]] && ip6_number="1"
 		ip6=$(ip -6 addr | grep 'inet6 [23]' | cut -d '/' -f 1 | grep -oE '([0-9a-fA-F]{0,4}:){1,7}[0-9a-fA-F]{0,4}' | sed -n "$ip6_number"p)
 	fi
 	echo
 	echo "端口"
-	read -p "默认 [51820]: " port
+	read -p "Port [51820]: " port
 	until [[ -z "$port" || "$port" =~ ^[0-9]+$ && "$port" -le 65535 ]]; do
 		echo "$port: invalid port."
-		read -p "默认 [51820]: " port
+		read -p "Port [51820]: " port
 	done
 	[[ -z "$port" ]] && port="51820"
 	echo
-	echo "输入用户名"
-	read -p "[client]: " unsanitized_client
+	echo "用户名"
+	read -p "Name [client]: " unsanitized_client
 	# Allow a limited lenght and set of characters to avoid conflicts
 	client=$(sed 's/[^0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-]/_/g' <<< "$unsanitized_client" | cut -c-15)
 	[[ -z "$client" ]] && client="client"
@@ -289,8 +287,7 @@ if [[ ! -e /etc/wireguard/wg0.conf ]]; then
 			firewall="iptables"
 		fi
 	fi
-	read -n1 -r -p "按任意键继续..........
-"
+	read -n1 -r -p "按任意键继续..........."
 	# Install WireGuard
 	# If not running inside a container, set up the WireGuard kernel module
 	if [[ ! "$is_container" -eq 0 ]]; then
@@ -510,7 +507,7 @@ EOF
 	fi
 	echo
 	qrencode -t UTF8 < ~/"$client.conf"
-	echo -e '\xE2\x86\x91 配置文件二维码'
+	echo -e '\xE2\x86\x91 二维码配置文件'
 	echo
 	# If the kernel module didn't load, system probably had an outdated kernel
 	# We'll try to help, but will not force a kernel upgrade upon the user
@@ -529,13 +526,12 @@ EOF
 	fi
 	echo
 	echo "配置文件目录:" ~/"$client.conf"
-	echo "可以通过再次运行此脚本来添加新用户"
+	echo "可再次运行此脚本来添加新用户"
 else
 	clear
- 	echo
-	echo "WireGuard已安装"
+	echo '--------------------WireGuard--------------------'
 	echo
-	echo "---------------WireGuard一键脚本---------------"
+	echo "WireGuard已经安装"
 	echo
 	echo "   1) 添加用户"
 	echo "   2) 移除用户"
@@ -549,7 +545,7 @@ else
 	case "$option" in
 		1)
 			echo
-			echo "添加新用户"
+			echo "添加用户"
 			read -p "Name: " unsanitized_client
 			# Allow a limited lenght and set of characters to avoid conflicts
 			client=$(sed 's/[^0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-]/_/g' <<< "$unsanitized_client" | cut -c-15)
@@ -565,7 +561,7 @@ else
 			wg addconf wg0 <(sed -n "/^# BEGIN_PEER $client/,/^# END_PEER $client/p" /etc/wireguard/wg0.conf)
 			echo
 			qrencode -t UTF8 < ~/"$client.conf"
-			echo -e '\xE2\x86\x91 配置文件二维码'
+			echo -e '\xE2\x86\x91 二维码配置文件'
 			echo
 			echo "$client 已添加.配置文件目录:" ~/"$client.conf"
 			exit
@@ -576,7 +572,7 @@ else
 			number_of_clients=$(grep -c '^# BEGIN_PEER' /etc/wireguard/wg0.conf)
 			if [[ "$number_of_clients" = 0 ]]; then
 				echo
-				echo "There are no existing clients!"
+				echo "没有用户"
 				exit
 			fi
 			echo
@@ -601,10 +597,10 @@ else
 				# Remove from the configuration file
 				sed -i "/^# BEGIN_PEER $client$/,/^# END_PEER $client$/d" /etc/wireguard/wg0.conf
 				echo
-				echo "$client 已移除"
+				echo "$client已移除"
 			else
 				echo
-				echo "$client removal aborted!"
+				echo "$client取消移除"
 			fi
 			exit
 		;;
@@ -613,7 +609,7 @@ else
 			read -p "确认卸载WireGuard? [y/N]: " remove
 			until [[ "$remove" =~ ^[yYnN]*$ ]]; do
 				echo "$remove: invalid selection."
-				read -p "确认卸载WireGuard? [y/N]: " remove
+				read -p "确认卸载WireGuard?  [y/N]: " remove
 			done
 			if [[ "$remove" =~ ^[yY]$ ]]; then
 				port=$(grep '^ListenPort' /etc/wireguard/wg0.conf | cut -d " " -f 3)
@@ -705,10 +701,10 @@ else
 					rm -f /usr/local/sbin/boringtun /usr/local/sbin/boringtun-upgrade
 				fi
 				echo
-				echo "卸载完成"
+				echo "WireGuard卸载完成"
 			else
 				echo
-				echo 
+				echo "WireGuard取消卸载"
 			fi
 			exit
 		;;
