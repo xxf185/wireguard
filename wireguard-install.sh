@@ -533,7 +533,7 @@ else
 	echo
 	echo "WireGuard已经安装"
 	echo
-	echo "   1) 添加用户"
+	echo "   1) 添加新用户"
 	echo "   2) 移除用户"
 	echo "   3) 卸载WireGuard"
 	echo "   4) 退出"
@@ -563,7 +563,7 @@ else
 			qrencode -t UTF8 < ~/"$client.conf"
 			echo -e '\xE2\x86\x91 二维码配置文件'
 			echo
-			echo "$client 已添加.配置文件目录:" ~/"$client.conf"
+			echo "$client已添加.配置文件目录:" ~/"$client.conf"
 			exit
 		;;
 		2)
@@ -576,7 +576,7 @@ else
 				exit
 			fi
 			echo
-			echo "移除用户"
+			echo "用户"
 			grep '^# BEGIN_PEER' /etc/wireguard/wg0.conf | cut -d ' ' -f 3 | nl -s ') '
 			read -p "选择: " client_number
 			until [[ "$client_number" =~ ^[0-9]+$ && "$client_number" -le "$number_of_clients" ]]; do
@@ -585,10 +585,10 @@ else
 			done
 			client=$(grep '^# BEGIN_PEER' /etc/wireguard/wg0.conf | cut -d ' ' -f 3 | sed -n "$client_number"p)
 			echo
-			read -p "确认移除$client? [y/N]: " remove
+			read -p "移除$client? [y/N]: " remove
 			until [[ "$remove" =~ ^[yYnN]*$ ]]; do
 				echo "$remove: invalid selection."
-				read -p "确认移除$client? [y/N]: " remove
+				read -p "移除$client? [y/N]: " remove
 			done
 			if [[ "$remove" =~ ^[yY]$ ]]; then
 				# The following is the right way to avoid disrupting other active connections:
@@ -606,10 +606,10 @@ else
 		;;
 		3)
 			echo
-			read -p "确认卸载WireGuard? [y/N]: " remove
+			read -p "卸载WireGuard? [y/N]: " remove
 			until [[ "$remove" =~ ^[yYnN]*$ ]]; do
 				echo "$remove: invalid selection."
-				read -p "确认卸载WireGuard?  [y/N]: " remove
+				read -p "卸载WireGuard?  [y/N]: " remove
 			done
 			if [[ "$remove" =~ ^[yY]$ ]]; then
 				port=$(grep '^ListenPort' /etc/wireguard/wg0.conf | cut -d " " -f 3)
