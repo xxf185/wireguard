@@ -108,7 +108,7 @@ new_client_dns () {
 	echo "   6) AdGuard"
 	read -p "选择 [1]: " dns
 	until [[ -z "$dns" || "$dns" =~ ^[1-6]$ ]]; do
-		echo "$dns: invalid selection."
+		echo "$dns: 选择错误"
 		read -p "选择 [1]: " dns
 	done
 		# DNS
@@ -201,7 +201,7 @@ if [[ ! -e /etc/wireguard/wg0.conf ]]; then
 		ip -4 addr | grep inet | grep -vE '127(\.[0-9]{1,3}){3}' | cut -d '/' -f 1 | grep -oE '[0-9]{1,3}(\.[0-9]{1,3}){3}' | nl -s ') '
 		read -p "选择 [1]: " ip_number
 		until [[ -z "$ip_number" || "$ip_number" =~ ^[0-9]+$ && "$ip_number" -le "$number_of_ip" ]]; do
-			echo "$ip_number: invalid selection."
+			echo "$ip_number: 选择错误"
 			read -p "选择 [1]: " ip_number
 		done
 		[[ -z "$ip_number" ]] && ip_number="1"
@@ -233,7 +233,7 @@ if [[ ! -e /etc/wireguard/wg0.conf ]]; then
 		ip -6 addr | grep 'inet6 [23]' | cut -d '/' -f 1 | grep -oE '([0-9a-fA-F]{0,4}:){1,7}[0-9a-fA-F]{0,4}' | nl -s ') '
 		read -p "选择 [1]: " ip6_number
 		until [[ -z "$ip6_number" || "$ip6_number" =~ ^[0-9]+$ && "$ip6_number" -le "$number_of_ip6" ]]; do
-			echo "$ip6_number: invalid selection."
+			echo "$ip6_number: 选择错误"
 			read -p "选择 [1]: " ip6_number
 		done
 		[[ -z "$ip6_number" ]] && ip6_number="1"
@@ -261,7 +261,7 @@ if [[ ! -e /etc/wireguard/wg0.conf ]]; then
 		echo "BoringTun will be installed to set up WireGuard in the system."
 		read -p "Should automatic updates be enabled for it? [Y/n]: " boringtun_updates
 		until [[ "$boringtun_updates" =~ ^[yYnN]*$ ]]; do
-			echo "$remove: invalid selection."
+			echo "$remove: 选择错误"
 			read -p "Should automatic updates be enabled for it? [Y/n]: " boringtun_updates
 		done
 		[[ -z "$boringtun_updates" ]] && boringtun_updates="y"
@@ -539,7 +539,7 @@ else
 	echo "   4) 退出"
 	read -p "选择: " option
 	until [[ "$option" =~ ^[1-4]$ ]]; do
-		echo "$option: invalid selection."
+		echo "$option: 选择错误"
 		read -p "选择: " option
 	done
 	case "$option" in
@@ -580,14 +580,14 @@ else
 			grep '^# BEGIN_PEER' /etc/wireguard/wg0.conf | cut -d ' ' -f 3 | nl -s ') '
 			read -p "选择: " client_number
 			until [[ "$client_number" =~ ^[0-9]+$ && "$client_number" -le "$number_of_clients" ]]; do
-				echo "$client_number: invalid selection."
+				echo "$client_number: 选择错误"
 				read -p "选择: " client_number
 			done
 			client=$(grep '^# BEGIN_PEER' /etc/wireguard/wg0.conf | cut -d ' ' -f 3 | sed -n "$client_number"p)
 			echo
 			read -p "移除$client? [y/N]: " remove
 			until [[ "$remove" =~ ^[yYnN]*$ ]]; do
-				echo "$remove: invalid selection."
+				echo "$remove: 选择错误"
 				read -p "移除$client? [y/N]: " remove
 			done
 			if [[ "$remove" =~ ^[yY]$ ]]; then
@@ -608,7 +608,7 @@ else
 			echo
 			read -p "卸载WireGuard? [y/N]: " remove
 			until [[ "$remove" =~ ^[yYnN]*$ ]]; do
-				echo "$remove: invalid selection."
+				echo "$remove: 选择错误"
 				read -p "卸载WireGuard?  [y/N]: " remove
 			done
 			if [[ "$remove" =~ ^[yY]$ ]]; then
